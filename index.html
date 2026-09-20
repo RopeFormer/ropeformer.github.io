@@ -59,8 +59,7 @@
 
 <!-- ============ overview ============ -->
 <section class="s" id="overview">
-  <aside class="rail"><h2 class="lbl" data-label="Overview">Overview</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="Overview">Overview</h2>
   <h3 class="hl">Every swing teaches the robot something about the rope.</h3>
   <p>Dynamic rope manipulation — swinging, twirling, whipping — is unusually sensitive to what the rope is made of. The same arm motion produces very different behaviour across ropes of different mass, stiffness and damping, and those properties are hard to identify and harder to carry over from simulation.</p>
   <p>Most approaches respond by modelling the rope: calibrate a simulator, estimate its parameters, or fit an action–response model from earlier executions. RopeFormer starts from a different question.</p>
@@ -71,8 +70,7 @@
 
 <!-- ============ video ============ -->
 <section class="s wide" id="video">
-  <aside class="rail"><h2 class="lbl" data-label="Video">Video</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="Video">Video</h2>
   <div class="head"><h3 class="hl">Project video</h3></div>
   <div class="ph rv">[ PROJECT VIDEO — in production ]</div>
 </div>
@@ -80,8 +78,7 @@
 
 <!-- ============ tasks ============ -->
 <section class="s wide" id="tasks">
-  <aside class="rail"><h2 class="lbl" data-label="Tasks">Tasks</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="Tasks">Tasks</h2>
   <div class="head">
     <h3 class="hl">One policy per task, three qualitatively different dynamics</h3>
     <p>Each task is trained separately but shares the same formulation, architecture and multi-trial protocol. A <b>trial</b> is one attempt at the task; an <b>episode</b> groups successive trials on the same rope. The robot–rope state is reset between trials, but the policy's context is not — it is cleared only when a new episode, and therefore a new rope, begins.</p>
@@ -101,8 +98,7 @@
 <!-- ============ method ============ -->
 <section class="band" id="method">
   <div class="s wide">
-  <aside class="rail"><h2 class="lbl" data-label="Method">Method</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="Method">Method</h2>
     <div class="head">
       <h3 class="hl">Keep the context, freeze the weights</h3>
       <p>At every control step the policy sees normalized joint states, the measured rope points, the task command or target, and its previous action — never the full rope state and never its physical parameters. A feed-forward encoder turns each observation into one token; a six-layer Transformer-XL combines it with cached representations of earlier steps; an actor head maps the result to joint targets at 30 Hz. The rope's response enters the next observation, closing the loop. History conditions the action directly, without an intermediate parameter estimate.</p>
@@ -122,8 +118,7 @@
 
 <!-- ============ simulation ============ -->
 <section class="s wide" id="sim">
-  <aside class="rail"><h2 class="lbl" data-label="Simulation">Simulation</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="Simulation">Simulation</h2>
   <div class="head">
     <h3 class="hl">Same rope, same start — the only thing that changes is memory</h3>
     <p>The central comparison uses the <em>same</em> checkpoint on the <em>same</em> 384-rope evaluation set with matched initial states and noise, and either retains the context across trial boundaries or resets it at every boundary. Both conditions keep within-trial history, so the difference isolates access to previous trials. An MLP with an eight-frame observation stack serves as a non-recurrent reference. The clips below are single replays chosen to illustrate the mechanism; the figures give the aggregate.</p>
@@ -171,8 +166,7 @@
 
 <!-- ============ real robot ============ -->
 <section class="s wide" id="real">
-  <aside class="rail"><h2 class="lbl" data-label="Real Robot">Real Robot</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="Real Robot">Real Robot</h2>
   <div class="head">
     <h3 class="hl">Repeated improvement on ropes never seen in training</h3>
     <p>A frozen TXL-1 policy per task runs on a Unitree H1-2 at 30 Hz. Two ZED 2i cameras track a single marker — the free tip for Swing and Whip, the midpoint for Twirl — and triangulate it into the same observation the policy saw in simulation. Measured rope properties are not inputs. Each three-trial block starts with empty context at T1 and keeps it through T2 and T3; between trials the policy pauses while the rope is returned to rest.</p>
@@ -209,8 +203,7 @@
 
 <!-- ============ bibtex ============ -->
 <section class="s wide" id="bibtex">
-  <aside class="rail"><h2 class="lbl" data-label="BibTeX">BibTeX</h2></aside>
-  <div class="body">
+  <div class="body"><h2 class="lbl" data-label="BibTeX">BibTeX</h2>
   <div class="head"></div>
   <div class="bibwrap rv">
     <button class="copy" id="copybib" type="button">Copy</button>
