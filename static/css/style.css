@@ -132,8 +132,7 @@ html.js .rv.in{opacity:1;transform:none}
 .task .th h3{margin:0;font-size:24px}
 .task .th h3 .tt{font-weight:400;font-size:1.1em;color:#b4531f}
 .task .th .sub{font-size:16px;color:var(--ink-3)}
-.task .row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;margin-top:28px;align-items:start}
-.task .row .fig{max-width:420px}
+.task .row{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:48px;margin-top:28px;align-items:start}
 .task .row .fig img{border:0;background:transparent}
 .task .row .fig .cap{font-size:13.5px;margin-top:10px}
 .task .row .fig{margin:0}
