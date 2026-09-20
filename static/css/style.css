@@ -4,7 +4,7 @@
 :root{
   --bg:#0b0b0c; --fg:#f4f2ee; --muted:#b9b3a8; --accent:#ff8a4c; --accent-ink:#1a0d05;
   --paper:#faf9f5; --paper-2:#f2efe8; --line:#e3ded4; --ink:#141413; --ink-2:#2b2925; --ink-3:#5f5a52; --ink-4:#7a7368;
-  --gut:clamp(16px,4vw,56px); --bar:72px; --col:760px; --wide:1120px;
+  --gut:clamp(16px,4vw,56px); --bar:72px; --col:760px; --wide:1200px; --rail:220px;
   --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --display:'Manrope',var(--sans);
   --tt:'LM Mono','Latin Modern Mono',ui-monospace,Menlo,Consolas,monospace;
@@ -62,12 +62,13 @@ sup{font-size:.6em;line-height:0}
 
 /* ---------- body ---------- */
 main{padding:calc(var(--bar) + 88px) var(--gut) 0}
-section.s,.band>.s{max-width:var(--wide);margin:0 auto;padding:0 0 120px}
-.lbl{margin:0 0 28px;font-family:var(--display);font-weight:800;font-size:clamp(32px,3.4vw,44px);letter-spacing:-.035em;line-height:1;color:var(--ink);display:flex;flex-wrap:wrap}
+section.s,.band>.s{max-width:var(--wide);margin:0 auto;padding:0 0 120px;display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0 48px;align-items:start}
+.rail{position:sticky;top:calc(var(--bar) + 28px)}
+.lbl{margin:0;font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.035em;line-height:1;color:var(--ink);display:flex;flex-wrap:wrap}
 .lbl .l{display:inline-block;opacity:0;filter:blur(8px);transform:translateY(.3em)}
 .lbl .l.sp{width:.28em}
 .lbl.play .l{animation:emerge .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i)*.05s)}
-.body{min-width:0}
+.body{min-width:0;max-width:900px}
 .head{max-width:var(--col)}
 .eyebrow{font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);margin:0 0 16px}
 h3.hl{margin:0 0 18px;font-family:var(--display);font-weight:700;font-size:clamp(21px,2.1vw,26px);letter-spacing:-.02em;line-height:1.25;text-wrap:balance}
@@ -139,7 +140,7 @@ html.js .rv.in{opacity:1;transform:none}
 .task .row p{font-size:19px;line-height:1.6;margin:0 0 16px}
 .task .row p:last-child{margin-bottom:0}
 .task .row .lead{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;color:var(--ink);margin-bottom:10px}
-@media (max-width:960px){.task .row{grid-template-columns:1fr}.task .row .fig{max-width:360px}}
+@media (max-width:960px){.task .row{grid-template-columns:1fr}.task .row .fig{max-width:360px}section.s,.band>.s{grid-template-columns:1fr;gap:20px 0}.rail{position:static}.lbl{font-size:24px}}
 
 .fig.col{max-width:420px}
 .fig.col img{border:0;background:transparent}
