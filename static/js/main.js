@@ -104,7 +104,11 @@
     const txt = el.dataset.label || el.textContent; el.textContent = ''; let i = 0;
     for (const ch of txt) { const s = document.createElement('span'); s.className = 'l' + (ch === ' ' ? ' sp' : ''); s.textContent = ch === ' ' ? '\u00a0' : ch; s.style.setProperty('--i', i++); el.appendChild(s); }
   });
-  const lio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('play'); lio.unobserve(e.target); } }), { threshold: 0.5 });
+  // replay every time a label comes back into view (it is reset while off-screen, so the letters re-emerge)
+  const lio = new IntersectionObserver(es => es.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('play'); }
+    else { e.target.classList.remove('play'); void e.target.offsetWidth; }
+  }), { threshold: 0.6 });
   document.querySelectorAll('.lbl').forEach(el => lio.observe(el));
 
   // ---- reveal on scroll ----
