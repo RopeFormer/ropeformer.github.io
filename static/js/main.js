@@ -99,6 +99,14 @@
   }
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(boot);
 
+  // ---- rail labels: split into letters, play on first view ----
+  document.querySelectorAll('.lbl').forEach(el => {
+    const txt = el.dataset.label || el.textContent; el.textContent = ''; let i = 0;
+    for (const ch of txt) { const s = document.createElement('span'); s.className = 'l' + (ch === ' ' ? ' sp' : ''); s.textContent = ch === ' ' ? '\u00a0' : ch; s.style.setProperty('--i', i++); el.appendChild(s); }
+  });
+  const lio = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('play'); lio.unobserve(e.target); } }), { threshold: 0.5 });
+  document.querySelectorAll('.lbl').forEach(el => lio.observe(el));
+
   // ---- reveal on scroll ----
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
   document.querySelectorAll('.rv').forEach(el => io.observe(el));

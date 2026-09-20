@@ -59,25 +59,31 @@
 
 <!-- ============ overview ============ -->
 <section class="s" id="overview">
-  <p class="eyebrow">Overview</p>
-  <h2>Every swing teaches the robot something about the rope.</h2>
+  <aside class="rail"><h2 class="lbl" data-label="Overview">Overview</h2></aside>
+  <div class="body">
+  <h3 class="hl">Every swing teaches the robot something about the rope.</h3>
   <p>Dynamic rope manipulation — swinging, twirling, whipping — is unusually sensitive to what the rope is made of. The same arm motion produces very different behaviour across ropes of different mass, stiffness and damping, and those properties are hard to identify and harder to carry over from simulation.</p>
   <p>Most approaches respond by modelling the rope: calibrate a simulator, estimate its parameters, or fit an action–response model from earlier executions. RopeFormer starts from a different question.</p>
   <p class="q">Instead of explicitly modelling rope dynamics that are difficult to identify and transfer, can a robot learn them implicitly from its own interaction history and use that to improve its next attempt?</p>
   <p>The answer is a Transformer-XL policy that keeps the ordered history of robot states, actions and observed rope motion across repeated trials. Its weights stay fixed and it is never told the rope's parameters; adaptation happens entirely through the retained context. We study this on three tasks — single-arm <span class="tt">Rope_Swing</span>, bimanual <span class="tt">Rope_Twirl</span> and target-line <span class="tt">Rope_Whip</span> — in controlled simulation and on a Unitree H1-2 with ropes it never saw in training.</p>
+</div>
 </section>
 
 <!-- ============ video ============ -->
 <section class="s wide" id="video">
-  <div class="head"><p class="eyebrow">Video</p><h2>Project video</h2></div>
+  <aside class="rail"><h2 class="lbl" data-label="Video">Video</h2></aside>
+  <div class="body">
+  <div class="head"><h3 class="hl">Project video</h3></div>
   <div class="ph rv">[ PROJECT VIDEO — in production ]</div>
+</div>
 </section>
 
 <!-- ============ tasks ============ -->
 <section class="s wide" id="tasks">
+  <aside class="rail"><h2 class="lbl" data-label="Tasks">Tasks</h2></aside>
+  <div class="body">
   <div class="head">
-    <p class="eyebrow">Tasks</p>
-    <h2>One policy per task, three qualitatively different dynamics</h2>
+    <h3 class="hl">One policy per task, three qualitatively different dynamics</h3>
     <p>Each task is trained separately but shares the same formulation, architecture and multi-trial protocol. A <b>trial</b> is one attempt at the task; an <b>episode</b> groups successive trials on the same rope. The robot–rope state is reset between trials, but the policy's context is not — it is cleared only when a new episode, and therefore a new rope, begins.</p>
   </div>
   <figure class="fig rv">
@@ -89,14 +95,16 @@
     <div><h4>(b) <span class="tt">Rope_Twirl</span></h4><p>Both hands hold the rope and coordinate to rotate its midpoint about the hand-to-hand line at a commanded rate. Metric: acquisition time under a combined rate, radius, direction and clearance score.</p></div>
     <div><h4>(c) <span class="tt">Rope_Whip</span></h4><p>The right hand drives the free tip along a prescribed line segment in a task plane — a transient sweep rather than a sustained motion. Metric: maximum normal deviation of the tip path from the target line.</p></div>
   </div>
+</div>
 </section>
 
 <!-- ============ method ============ -->
 <section class="band" id="method">
-  <section class="s wide" style="padding-bottom:0">
+  <div class="s wide">
+  <aside class="rail"><h2 class="lbl" data-label="Method">Method</h2></aside>
+  <div class="body">
     <div class="head">
-      <p class="eyebrow">Method</p>
-      <h2>Keep the context, freeze the weights</h2>
+      <h3 class="hl">Keep the context, freeze the weights</h3>
       <p>At every control step the policy sees normalized joint states, the measured rope points, the task command or target, and its previous action — never the full rope state and never its physical parameters. A feed-forward encoder turns each observation into one token; a six-layer Transformer-XL combines it with cached representations of earlier steps; an actor head maps the result to joint targets at 30 Hz. The rope's response enters the next observation, closing the loop. History conditions the action directly, without an intermediate parameter estimate.</p>
     </div>
     <figure class="fig plain rv">
@@ -108,14 +116,16 @@
       <div><h4>Trained on repeated attempts</h4><p>In Newton, each episode samples a rope (mass density, bending stiffness, damping, drag) and an actuator (tracking, delay, limits), then runs several trials with context retained. The policy therefore meets many action–response relationships across episodes and can exploit one within an episode.</p></div>
       <div><h4>The actor never sees the rope's parameters</h4><p>PPO with an asymmetric critic: the critic receives simulator-only rope and actuator parameters, the actor receives only its observation history. Advantage estimation stops at trial resets; context does not.</p></div>
     </div>
-  </section>
+  </div>
+  </div>
 </section>
 
 <!-- ============ simulation ============ -->
-<section class="s wide" id="sim" style="padding-top:96px">
+<section class="s wide" id="sim">
+  <aside class="rail"><h2 class="lbl" data-label="Simulation">Simulation</h2></aside>
+  <div class="body">
   <div class="head">
-    <p class="eyebrow">Simulation</p>
-    <h2>Same rope, same start — the only thing that changes is memory</h2>
+    <h3 class="hl">Same rope, same start — the only thing that changes is memory</h3>
     <p>The central comparison uses the <em>same</em> checkpoint on the <em>same</em> 384-rope evaluation set with matched initial states and noise, and either retains the context across trial boundaries or resets it at every boundary. Both conditions keep within-trial history, so the difference isolates access to previous trials. An MLP with an eight-frame observation stack serves as a non-recurrent reference. The clips below are single replays chosen to illustrate the mechanism; the figures give the aggregate.</p>
   </div>
 
@@ -123,46 +133,48 @@
     <div class="th"><h3><span class="tt">Rope_Swing</span></h3><span class="sub">one arm, sustained rotation · same command, two ropes</span></div>
     <div class="video"><video src="static/videos/sim_task1.mp4" muted loop playsinline preload="metadata"></video></div>
     <div class="row">
+      <figure class="fig"><img src="static/images/fig3_rope_swing.png" alt="Rope Swing results: acquisition time per trial and trial 2 to 5 success for TXL and MLP with context retained or reset"><figcaption class="cap">Fig. 3 — 384 ropes, five trials. Solid/filled: context retained; dashed/open: reset.</figcaption></figure>
       <div>
         <p class="lead">Memory turns a coin-flip into a reliable lock.</p>
         <p>In the clip, one policy receives the same speed command on a soft rope (bending stiffness 2) and a stiff one (26). It is never told which rope it holds, yet the arm motion it settles into is different — the history is doing the identification.</p>
         <p>Over 384 ropes and trials 2–5, retaining context cuts TXL-1 mean acquisition time from 7.39 s to 4.89 s and raises success from 48.2% to 79.8%. TXL-6 improves from 5.64 s to 4.34 s. The MLP conditions coincide, as they must: with no cross-trial state there is nothing to retain.</p>
       </div>
-      <figure class="fig"><img src="static/images/fig3_rope_swing.png" alt="Rope Swing results: acquisition time per trial and trial 2 to 5 success for TXL and MLP with context retained or reset"><figcaption class="cap">Fig. 3 — 384 ropes, five trials. Solid/filled: context retained; dashed/open: reset.</figcaption></figure>
     </div>
 
   <div class="task rv">
     <div class="th"><h3><span class="tt">Rope_Twirl</span></h3><span class="sub">two arms, sustained rotation · trial 2 with memory cleared vs. kept</span></div>
     <div class="video"><video src="static/videos/sim_task2.mp4" muted loop playsinline preload="metadata"></video></div>
     <div class="row">
+      <figure class="fig"><img src="static/images/fig4_rope_twirl.png" alt="Rope Twirl results: trial 2 to 5 mean acquisition time by bending-stiffness group for TXL and MLP, retained versus reset"><figcaption class="cap">Fig. 4 — trials 2–5 by stiffness group (L/M/H, 128 ropes each). Filled: retained; outline: reset.</figcaption></figure>
       <div>
         <p class="lead">This is the causal contrast.</p>
         <p>Both columns show trial 2 on the same rope, from the same start, with the same noise. The only difference is whether the context from trial 1 was cleared (left) or kept (right). For this rope, trial 1 locked the rotation at 4.07 s; trial 2 takes 4.07 s again with memory cleared and 2.67 s with memory kept.</p>
         <p>Across ropes the benefit depends on the rope and on what is observed. With one rope point, memory helps most on low- and mid-stiffness ropes (1.55 s and 1.19 s sooner); with six points, it helps most on stiff ropes (0.79 s sooner). The absolute ordering of architectures also flips between soft and stiff ropes.</p>
       </div>
-      <figure class="fig"><img src="static/images/fig4_rope_twirl.png" alt="Rope Twirl results: trial 2 to 5 mean acquisition time by bending-stiffness group for TXL and MLP, retained versus reset"><figcaption class="cap">Fig. 4 — trials 2–5 by stiffness group (L/M/H, 128 ropes each). Filled: retained; outline: reset.</figcaption></figure>
     </div>
 
   <div class="task rv">
     <div class="th"><h3><span class="tt">Rope_Whip</span></h3><span class="sub">one arm, transient sweep · four attempts at the same line</span></div>
     <div class="video"><video src="static/videos/sim_task3.mp4" muted loop playsinline preload="metadata"></video></div>
     <div class="row">
+      <figure class="fig"><img src="static/images/fig5_rope_whip.png" alt="Rope Whip results: trial 1 versus trial 2 maximum tip-path deviation for ropes at three target-line angles"><figcaption class="cap">Fig. 5 — trial 1 (grey) vs. trial 2 (orange) at three target angles; numbers are mean unsigned d<sub>max</sub>.</figcaption></figure>
       <div>
         <p class="lead">Each attempt lands closer, and nothing changed but the memory.</p>
         <p>Same rope, same target line, bit-identical start between attempts. Maximum deviation from the line drops from 11.8 cm to 3.5, 3.0 and 2.6 cm over the four trials.</p>
         <p>In the figure, grey is trial 1 and orange trial 2 for the same ropes at three target angles. Mean deviation decreases at every angle, most at 60°, while target-length coverage stays above 95% in both conditions.</p>
       </div>
-      <figure class="fig"><img src="static/images/fig5_rope_whip.png" alt="Rope Whip results: trial 1 versus trial 2 maximum tip-path deviation for ropes at three target-line angles"><figcaption class="cap">Fig. 5 — trial 1 (grey) vs. trial 2 (orange) at three target angles; numbers are mean unsigned d<sub>max</sub>.</figcaption></figure>
     </div>
 
   <p style="margin-top:56px">Retained context improves aggregate performance in all three tasks, but not uniformly: stratifying the <span class="tt">Rope_Twirl</span> ropes by stiffness shows the gain moving between observation settings and dynamics regimes. History is a useful context, not a guarantee that every next trial is better.</p>
+</div>
 </section>
 
 <!-- ============ real robot ============ -->
 <section class="s wide" id="real">
+  <aside class="rail"><h2 class="lbl" data-label="Real Robot">Real Robot</h2></aside>
+  <div class="body">
   <div class="head">
-    <p class="eyebrow">Real robot · Unitree H1-2</p>
-    <h2>Repeated improvement on ropes never seen in training</h2>
+    <h3 class="hl">Repeated improvement on ropes never seen in training</h3>
     <p>A frozen TXL-1 policy per task runs on a Unitree H1-2 at 30 Hz. Two ZED 2i cameras track a single marker — the free tip for Swing and Whip, the midpoint for Twirl — and triangulate it into the same observation the policy saw in simulation. Measured rope properties are not inputs. Each three-trial block starts with empty context at T1 and keeps it through T2 and T3; between trials the policy pauses while the rope is returned to rest.</p>
   </div>
   <figure class="fig plain rv">
@@ -192,11 +204,14 @@
       <figcaption class="cap">The physical ropes, left to right by task. None of them appeared in training; the policy is never told which one it is holding.</figcaption>
     </figure>
   </div>
+</div>
 </section>
 
 <!-- ============ bibtex ============ -->
 <section class="s wide" id="bibtex">
-  <div class="head"><p class="eyebrow">BibTeX</p></div>
+  <aside class="rail"><h2 class="lbl" data-label="BibTeX">BibTeX</h2></aside>
+  <div class="body">
+  <div class="head"></div>
   <div class="bibwrap rv">
     <button class="copy" id="copybib" type="button">Copy</button>
 <pre class="bib" id="bib">@article{wu2026ropeformer,
@@ -206,6 +221,7 @@
   year    = {2026}
 }</pre>
   </div>
+</div>
 </section>
 
 </main>

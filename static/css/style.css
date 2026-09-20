@@ -4,7 +4,7 @@
 :root{
   --bg:#0b0b0c; --fg:#f4f2ee; --muted:#b9b3a8; --accent:#ff8a4c; --accent-ink:#1a0d05;
   --paper:#faf9f5; --paper-2:#f2efe8; --line:#e3ded4; --ink:#141413; --ink-2:#2b2925; --ink-3:#5f5a52; --ink-4:#7a7368;
-  --gut:clamp(16px,4vw,56px); --bar:72px; --col:760px; --wide:1120px;
+  --gut:clamp(16px,4vw,56px); --bar:72px; --col:760px; --wide:1200px; --rail:220px;
   --sans:'IBM Plex Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   --display:'Manrope',var(--sans);
   --tt:'LM Mono','Latin Modern Mono',ui-monospace,Menlo,Consolas,monospace;
@@ -62,11 +62,16 @@ sup{font-size:.6em;line-height:0}
 
 /* ---------- body ---------- */
 main{padding:calc(var(--bar) + 88px) var(--gut) 0}
-section.s{max-width:var(--col);margin:0 auto;padding:0 0 112px}
-section.s.wide{max-width:var(--wide)}
-.head{max-width:var(--col);margin:0 auto}
+section.s,.band>.s{max-width:var(--wide);margin:0 auto;padding:0 0 120px;display:grid;grid-template-columns:var(--rail) minmax(0,1fr);gap:0 48px;align-items:start}
+.rail{position:sticky;top:calc(var(--bar) + 28px)}
+.lbl{margin:0;font-family:var(--display);font-weight:800;font-size:30px;letter-spacing:-.035em;line-height:1;color:var(--ink);display:flex;flex-wrap:wrap}
+.lbl .l{display:inline-block;opacity:0;filter:blur(8px);transform:translateY(.3em)}
+.lbl .l.sp{width:.28em}
+.lbl.play .l{animation:emerge .7s cubic-bezier(.2,.7,.2,1) forwards;animation-delay:calc(var(--i)*.05s)}
+.body{min-width:0;max-width:900px}
+.head{max-width:var(--col)}
 .eyebrow{font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--ink-4);margin:0 0 16px}
-h2{margin:0 0 22px;font-family:var(--display);font-weight:800;font-size:clamp(28px,3vw,40px);letter-spacing:-.025em;line-height:1.1;text-wrap:balance}
+h3.hl{margin:0 0 22px;font-family:var(--display);font-weight:800;font-size:clamp(26px,2.8vw,36px);letter-spacing:-.025em;line-height:1.12;text-wrap:balance}
 h3{margin:36px 0 10px;font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.015em;line-height:1.25}
 p{margin:0 0 18px;font-size:19px;line-height:1.6;color:var(--ink-2)}
 p.small,.cap{font-size:15px;line-height:1.55;color:var(--ink-3)}
@@ -89,9 +94,11 @@ p.small,.cap{font-size:15px;line-height:1.55;color:var(--ink-3)}
 .video video{width:100%;height:100%;object-fit:contain}
 .ph{aspect-ratio:16/9;border:1px dashed #c9c2b5;border-radius:10px;display:grid;place-items:center;color:var(--ink-3);font-family:var(--sans);font-weight:600;font-size:13px;letter-spacing:.1em;text-transform:uppercase;text-align:center;padding:24px}
 .ph.short{aspect-ratio:16/6}
-.band{background:var(--bg);color:var(--fg);margin:0 calc(-1*var(--gut));padding:96px var(--gut) 104px}
+.band{background:var(--bg);color:var(--fg);margin:0 calc(-1*var(--gut));padding:96px var(--gut) 0}
+.band>.s{padding-bottom:104px}
+#sim{padding-top:96px}
 .band .eyebrow{color:#a39c90}
-.band h2,.band h3{color:var(--fg)}
+.band .hl,.band h3,.band .lbl{color:var(--fg)}
 .band p{color:#d8d3ca}
 .band .cap{color:#a39c90}
 .band .fig img{border:0}
@@ -125,14 +132,15 @@ html.js .rv.in{opacity:1;transform:none}
 .task .th h3{margin:0;font-size:24px}
 .task .th h3 .tt{font-weight:400;font-size:1.1em;color:#b4531f}
 .task .th .sub{font-size:16px;color:var(--ink-3)}
-.task .row{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:56px;margin-top:28px;align-items:start}
+.task .row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;margin-top:28px;align-items:start}
+.task .row .fig{max-width:420px}
 .task .row .fig img{border:0;background:transparent}
 .task .row .fig .cap{font-size:13.5px;margin-top:10px}
 .task .row .fig{margin:0}
 .task .row p{font-size:17px;line-height:1.6;margin:0 0 14px}
 .task .row p:last-child{margin-bottom:0}
 .task .row .lead{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--ink);margin-bottom:10px}
-@media (max-width:960px){.task .row{grid-template-columns:1fr}.task .row .fig{max-width:360px}}
+@media (max-width:960px){.task .row{grid-template-columns:1fr}.task .row .fig{max-width:360px}section.s,.band>.s{grid-template-columns:1fr;gap:20px 0}.rail{position:static}.lbl{font-size:22px}}
 
 .fig.col{max-width:420px}
 .fig.col img{border:0;background:transparent}
