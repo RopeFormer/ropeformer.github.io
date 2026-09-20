@@ -125,9 +125,14 @@ html.js .rv.in{opacity:1;transform:none}
 .task .th h3{margin:0;font-size:24px}
 .task .th h3 .tt{font-weight:400;font-size:1.1em;color:#b4531f}
 .task .th .sub{font-size:16px;color:var(--ink-3)}
-.task .row{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:40px;margin-top:28px;align-items:start}
+.task .row{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:56px;margin-top:28px;align-items:start}
+.task .row .fig img{border:0;background:transparent}
+.task .row .fig .cap{font-size:13.5px;margin-top:10px}
 .task .row .fig{margin:0}
 .task .row p{font-size:17px;line-height:1.6;margin:0 0 14px}
 .task .row p:last-child{margin-bottom:0}
 .task .row .lead{font-family:var(--display);font-weight:700;font-size:19px;letter-spacing:-.01em;color:var(--ink);margin-bottom:10px}
-@media (max-width:960px){.task .row{grid-template-columns:1fr}}
+@media (max-width:960px){.task .row{grid-template-columns:1fr}.task .row .fig{max-width:360px}}
+
+.fig.col{max-width:420px}
+.fig.col img{border:0;background:transparent}
