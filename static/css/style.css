@@ -1,4 +1,5 @@
 /* RopeFormer project page */
+@font-face{font-family:'DejaVu Sans Mono';src:url('../fonts/DejaVuSansMono-Bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
 @font-face{font-family:'LM Mono';src:url('../fonts/lmmono10-regular.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
 
 :root{
@@ -151,6 +152,10 @@ html.js .rv.in{opacity:1;transform:none}
 .anim{position:relative;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 8px 8px}
 .anim svg{display:block;width:100%;height:auto}
 .anim.arch{border:0;padding:0;border-radius:10px}
-.replay{position:absolute;bottom:8px;right:8px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 9px;cursor:pointer;opacity:.7}
+.replay{position:absolute;top:8px;right:8px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 9px;cursor:pointer;opacity:.7}
 .replay:hover{opacity:1;color:var(--ink);border-color:var(--ink-3)}
 .task .row .fig .anim{max-width:100%}
+.replay.br{top:auto;bottom:8px}
+.anim.arch{background:#fff;padding:10px 12px;border:1px solid var(--line)}
+.anim.arch svg{width:100%;height:auto}
+.anim.arch svg text{font-family:'DejaVu Sans Mono',Menlo,monospace!important}
