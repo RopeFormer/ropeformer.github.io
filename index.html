@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
-<link rel="stylesheet" href="static/css/style.css?v=9">
+<link rel="stylesheet" href="static/css/style.css?v=10">
 </head>
 <body>
 
@@ -108,7 +108,7 @@
       <p>At every control step the policy sees normalized joint states, the measured rope points, the task command or target, and its previous action — never the full rope state and never its physical parameters. A feed-forward encoder turns each observation into one token; a six-layer Transformer-XL combines it with cached representations of earlier steps; an actor head maps the result to joint targets at 30 Hz. The rope's response enters the next observation, closing the loop. History conditions the action directly, without an intermediate parameter estimate.</p>
     </div>
     <figure class="fig plain rv">
-      <img src="static/images/fig1_pipeline.png" alt="RopeFormer pipeline: observation, embedding, six Transformer-XL blocks and an actor head; expanded block shows the query attending to cached and current keys and values" style="border-radius:10px">
+      <div class="anim arch" data-fig="arch"></div>
       <figcaption class="cap">Streaming inference shared by all six layers. The current query attends to the cached keys and values of the preceding 128-frame segment and to the current segment. A completed segment replaces the cache, so memory stays bounded and an action is produced every step.</figcaption>
     </figure>
     <div class="grid3 rv">
@@ -133,7 +133,7 @@
     <div class="th"><h3><span class="tt">Rope_Swing</span></h3><span class="sub">one arm, sustained rotation · same command, two ropes</span></div>
     <div class="video"><video src="static/videos/sim_task1.mp4" muted loop playsinline preload="metadata"></video></div>
     <div class="row">
-      <figure class="fig"><img src="static/images/fig3_rope_swing.png" alt="Rope Swing results: acquisition time per trial and trial 2 to 5 success for TXL and MLP with context retained or reset"><figcaption class="cap">Fig. 3 — 384 ropes, five trials. Solid/filled: context retained; dashed/open: reset.</figcaption></figure>
+      <figure class="fig"><div class="anim" data-fig="swing"></div><figcaption class="cap">Fig. 3 — 384 ropes, five trials. Solid lines and filled bars: context retained; dashed lines and outlined bars: reset at every trial.</figcaption></figure>
       <div>
         <p class="lead">Memory turns a coin-flip into a reliable lock.</p>
         <p>In the clip, one policy receives the same speed command on a soft rope (bending stiffness 2) and a stiff one (26). It is never told which rope it holds, yet the arm motion it settles into is different — the history is doing the identification.</p>
@@ -145,7 +145,7 @@
     <div class="th"><h3><span class="tt">Rope_Twirl</span></h3><span class="sub">two arms, sustained rotation · trial 2 with memory cleared vs. kept</span></div>
     <div class="video"><video src="static/videos/sim_task2.mp4" muted loop playsinline preload="metadata"></video></div>
     <div class="row">
-      <figure class="fig"><img src="static/images/fig4_rope_twirl.png" alt="Rope Twirl results: trial 2 to 5 mean acquisition time by bending-stiffness group for TXL and MLP, retained versus reset"><figcaption class="cap">Fig. 4 — trials 2–5 by stiffness group (L/M/H, 128 ropes each). Filled: retained; outline: reset.</figcaption></figure>
+      <figure class="fig"><div class="anim" data-fig="twirl"></div><figcaption class="cap">Fig. 4 — trials 2–5 by stiffness group (L/M/H, 128 ropes each). Grey: KV cache cleared at each trial; colour: KV cache retained. Labels give retained − reset in seconds.</figcaption></figure>
       <div>
         <p class="lead">This is the causal contrast.</p>
         <p>Both columns show trial 2 on the same rope, from the same start, with the same noise. The only difference is whether the context from trial 1 was cleared (left) or kept (right). For this rope, trial 1 locked the rotation at 4.07 s; trial 2 takes 4.07 s again with memory cleared and 2.67 s with memory kept.</p>
@@ -233,6 +233,7 @@
   </div>
 </footer>
 
-<script src="static/js/main.js?v=9"></script>
+<script src="static/js/main.js?v=10"></script>
+<script src="static/js/figs.js?v=10"></script>
 </body>
 </html>

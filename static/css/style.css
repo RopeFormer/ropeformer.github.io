@@ -146,3 +146,11 @@ html.js .rv.in{opacity:1;transform:none}
 .fig.col img{border:0;background:transparent}
 
 #method .fig.plain{max-width:820px}
+
+/* animated figures */
+.anim{position:relative;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 8px 8px}
+.anim svg{display:block;width:100%;height:auto}
+.anim.arch{border:0;padding:0;border-radius:10px}
+.replay{position:absolute;bottom:8px;right:8px;font:600 11px var(--sans);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);background:transparent;border:1px solid var(--line);border-radius:999px;padding:4px 9px;cursor:pointer;opacity:.7}
+.replay:hover{opacity:1;color:var(--ink);border-color:var(--ink-3)}
+.task .row .fig .anim{max-width:100%}
