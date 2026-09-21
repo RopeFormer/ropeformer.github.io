@@ -1,6 +1,4 @@
-// Generated from data/figures.json by scripts/generate_figdata.py.
-// Edit the JSON source, then regenerate this file.
-window.ROPEFIG_DATA = {
+{
   "fig3": {
     "swing": {
       "txl_tip": {
@@ -545,4 +543,4 @@ window.ROPEFIG_DATA = {
       ]
     }
   }
-};
+}

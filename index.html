@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="static/css/style.css?v=17">
+<link rel="stylesheet" href="static/css/style.css?v=18">
 </head>
 <body>
 
@@ -23,7 +23,7 @@
   <nav class="secnav" id="secnav" aria-label="Sections">
     <a href="#overview">Overview</a><a href="#video">Video</a><a href="#tasks">Tasks</a><a href="#method">Method</a><a href="#sim">Simulation</a><a href="#real">Real Robot</a><a href="#bibtex">BibTeX</a>
   </nav>
-  <span class="slotR" id="slotR" aria-hidden="true"><span class="btn">Paper</span><span class="btn">Code <span class="tag">SOON</span></span></span>
+  <span class="slotR" id="slotR" aria-hidden="true"><span class="btn">Paper <span class="tag">SOON</span></span><span class="btn">Code <span class="tag">SOON</span></span></span>
 </div>
 
 <!-- ============ hero stage ============ -->
@@ -47,7 +47,7 @@
     <div class="affil t" id="t3"><sup>1</sup>UC Berkeley · <sup>2</sup>Xi'an Jiaotong University · <sup>3</sup>SUSTech · <sup>4</sup>Peking University · <sup>*</sup>Equal contribution</div>
     <div class="ctabox"><div class="cta" id="cta"><div class="ctain t" id="ctain">
       <a class="btn primary sec" href="#video"><svg viewBox="0 0 16 16" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5z"/></svg>Video</a>
-      <a class="btn res" href="[ARXIV-URL]" target="_blank" rel="noopener"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 1.5h5l3 3v10H4z"/><path d="M9 1.5v3h3M6 8h4M6 11h4"/></svg>Paper</a>
+      <span class="btn res soon" aria-disabled="true"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M4 1.5h5l3 3v10H4z"/><path d="M9 1.5v3h3M6 8h4M6 11h4"/></svg>Paper <span class="tag">SOON</span></span>
       <span class="btn res soon" aria-disabled="true"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M5.5 4L2 8l3.5 4M10.5 4L14 8l-3.5 4"/></svg>Code <span class="tag">SOON</span></span>
       <a class="btn sec" href="#bibtex"><svg viewBox="0 0 16 16" width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 2h10v12H3zM6 5h4M6 8h4"/></svg>BibTeX</a>
     </div></div></div>
@@ -373,6 +373,8 @@
       </div>
     </div>
 
+  </div>
+
   <div class="task rv">
     <div class="th"><h3><span class="tt">Rope_Twirl</span></h3><span class="sub">two arms, sustained rotation · trial 2 with memory cleared vs. kept</span></div>
     <div class="video"><video src="static/videos/sim_task2.mp4?v=2" poster="static/videos/sim_task2_poster.jpg" muted loop playsinline preload="metadata"></video></div>
@@ -384,6 +386,8 @@
         <p>The benefit depends on rope stiffness and the available observations. With one observed rope point, the largest gains occur for low and medium stiffness (1.55 s and 1.19 s faster). With six points, the largest gain occurs for high stiffness (0.79 s faster). Which architecture performs best also changes with stiffness.</p>
       </div>
     </div>
+
+  </div>
 
   <div class="task rv">
     <div class="th"><h3><span class="tt">Rope_Whip</span></h3><span class="sub">one arm, transient sweep · five attempts at the same line</span></div>
@@ -397,7 +401,9 @@
       </div>
     </div>
 
-  <p style="margin-top:56px">Across all three tasks, retaining context improves aggregate performance. The size of the benefit varies with rope dynamics and the observations available to the policy; individual attempts do not always improve.</p>
+  </div>
+
+  <p class="simulation-summary">Across all three tasks, retaining context improves aggregate performance. The size of the benefit varies with rope dynamics and the observations available to the policy; individual attempts do not always improve.</p>
 </div>
 </section>
 
@@ -444,16 +450,7 @@
 <section class="s wide" id="bibtex">
   <aside class="rail"><h2 class="lbl" data-label="BibTeX">BibTeX</h2></aside>
   <div class="body">
-  <div class="head"></div>
-  <div class="bibwrap rv">
-    <button class="copy" id="copybib" type="button">Copy</button>
-<pre class="bib" id="bib">@article{wu2026ropeformer,
-  title   = {RopeFormer: Cross-Trial Adaptation from Interaction History for Dynamic Rope Manipulation},
-  author  = {Wu, Menglin and Yao, Kaixiang and Luan, Shangbo and Tomizuka, Masayoshi and Chen, Yuxin},
-  journal = {arXiv preprint arXiv:XXXX.XXXXX},
-  year    = {2026}
-}</pre>
-  </div>
+  <p class="small rv">Citation details will be available with the paper.</p>
 </div>
 </section>
 
@@ -462,12 +459,11 @@
 <footer>
   <div class="in">
     <span>© 2026 The RopeFormer authors · Mechanical Systems Control Lab, UC Berkeley</span>
-    <span>Contact: <a href="mailto:[EMAIL]">[EMAIL]</a></span>
   </div>
 </footer>
 
-<script src="static/js/main.js?v=14"></script>
-<script src="static/js/figdata.js?v=14"></script>
+<script src="static/js/main.js?v=18"></script>
+<script src="static/js/figdata.js?v=18"></script>
 <script src="static/js/figs.js?v=14"></script>
 </body>
 </html>

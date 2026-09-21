@@ -4,6 +4,7 @@
   const hero = $('hero'), bg = $('bg'), mark = $('mark'), cta = $('cta'), ctain = $('ctain'),
         topbar = $('topbar'), slotL = $('slotL'), slotR = $('slotR'), secnav = $('secnav'), hint = $('hint');
   const texts = [$('t1'), $('t2'), $('t3')];
+  const ctabox = cta.parentElement;
   const secBtns = [...cta.querySelectorAll('.sec')], resBtns = [...cta.querySelectorAll('.res')];
   const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches, D = reduce ? 0 : 1;
   const EASE_OUT = 'cubic-bezier(.2,.7,.2,1)', EASE_IO = 'cubic-bezier(.65,0,.35,1)';
@@ -11,7 +12,11 @@
 
   // ---- geometry: where the wordmark and the resource buttons start and land ----
   function measure() {
+    if (busy) return;
+    // Finished transition animations must not override geometry after a resize.
+    [mark, cta].forEach(el => el.getAnimations().forEach(a => a.cancel()));
     mark.classList.remove('pinned'); cta.classList.remove('pinned'); mark.style.transform = ''; cta.style.transform = '';
+    ctabox.style.height = '';
     const mr = mark.getBoundingClientRect(), cr = cta.getBoundingClientRect(), lr = slotL.getBoundingClientRect(), rr = slotR.getBoundingClientRect();
     const r0 = resBtns[0].getBoundingClientRect(), r2 = resBtns[resBtns.length - 1].getBoundingClientRect();
     const resW = r2.right - r0.left, s = 36 / 44, off = r0.left - cr.left;
@@ -19,6 +24,8 @@
     end.m = `translate(${lr.left}px,${lr.top}px) scale(${lr.width / mr.width})`;
     start.c = `translate(${cr.left}px,${cr.top}px) scale(1)`;
     end.c = `translate(${rr.right - resW * s - off * s}px,${rr.top + (rr.height - 44 * s) / 2}px) scale(${s})`;
+    // Preserve the space occupied by wrapped buttons before fixing them to the viewport.
+    ctabox.style.height = `${cr.height}px`;
     mark.classList.add('pinned'); cta.classList.add('pinned');
     mark.style.transform = open ? start.m : end.m; cta.style.transform = open ? start.c : end.c;
   }
@@ -26,6 +33,12 @@
   const fadeIn = (el, delay) => anim(el, [{ opacity: 0, transform: 'translateY(14px)' }, { opacity: 1, transform: 'none' }], { duration: 420 * D, delay: delay * D });
   const fadeOut = (el, delay) => anim(el, [{ opacity: 1, transform: 'none' }, { opacity: 0, transform: 'translateY(18px)' }], { duration: 260 * D, delay: delay * D, easing: 'cubic-bezier(.4,0,.8,.4)' });
   const lock = on => document.documentElement.classList.toggle('locked', on);
+  // Treat a fragment as an element ID, not a CSS selector (IDs may contain punctuation).
+  function hashTarget(hash = location.hash) {
+    if (!hash || hash === '#') return null;
+    try { return document.getElementById(decodeURIComponent(hash.slice(1))); }
+    catch { return null; }
+  }
 
   // ---- entrance ----
   function enter() {
@@ -45,7 +58,7 @@
     const n = anim(secnav, [{ opacity: 0, transform: 'translate(-50%,-40%)' }, { opacity: 1, transform: 'translate(-50%,-50%)' }], { duration: 360 * D, delay: 560 * D });
     await Promise.all([...outs, m, c, ...sb, b, t, n]);
     secBtns.forEach(b => b.style.visibility = 'hidden');
-    hero.classList.add('closed'); topbar.classList.add('on'); open = false; lock(false); busy = false; setActive();
+    hero.classList.add('closed'); topbar.classList.add('on'); open = false; lock(false); busy = false; measure(); setActive();
     const v = bg.querySelector('video'); if (v) v.pause();
   }
   // ---- page -> hero ----
@@ -60,11 +73,11 @@
     const b = anim(bg, [{ opacity: 0 }, { opacity: 1 }], { duration: 420 * D, delay: 80 * D, easing: EASE_IO });
     const t = anim(topbar, [{ opacity: 1 }, { opacity: 0 }], { duration: 240 * D, delay: 80 * D });
     await Promise.all([n, m, c, ...sb, b, t, fadeIn(texts[0], 380), fadeIn(texts[1], 450), fadeIn(texts[2], 520), fadeIn(hint, 580)]);
-    open = true; busy = false;
+    open = true; busy = false; measure();
   }
 
   // ---- section highlight ----
-  const links = [...secnav.querySelectorAll('a')], secs = links.map(a => document.querySelector(a.getAttribute('href')));
+  const links = [...secnav.querySelectorAll('a')], secs = links.map(a => hashTarget(a.getAttribute('href')));
   function setActive() {
     const y = window.scrollY + parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar')) + 48; let cur = 0;
     secs.forEach((s, i) => { if (s && s.offsetTop <= y) cur = i; });
@@ -84,17 +97,20 @@
   });
   hint.addEventListener('click', close);
   mark.addEventListener('click', () => { if (open) return; if (window.scrollY > 0) window.scrollTo({ top: 0, behavior: 'smooth' }); const w = () => { if (window.scrollY <= 0) reopen(); else requestAnimationFrame(w); }; w(); });
-  secBtns.forEach(a => a.addEventListener('click', e => { if (open) { e.preventDefault(); close().then(() => { const t = document.querySelector(a.getAttribute('href')); t && t.scrollIntoView({ behavior: 'smooth' }); }); } }));
+  secBtns.forEach(a => a.addEventListener('click', e => { if (open) { e.preventDefault(); close().then(() => { const t = hashTarget(a.getAttribute('href')); t && t.scrollIntoView({ behavior: 'smooth' }); }); } }));
   addEventListener('resize', measure);
 
   // ---- deep links (#method etc.) skip the stage ----
   function boot() {
     measure();
-    if (location.hash && document.querySelector(location.hash)) {
+    const target = hashTarget();
+    if (target) {
       open = false; hero.classList.add('closed', 'play'); topbar.classList.add('on');
-      texts.forEach(t => t.style.opacity = 1); ctain.style.opacity = 1;
+      texts.forEach(t => t.style.opacity = 0); hint.style.opacity = 0; ctain.style.opacity = 1;
       secBtns.forEach(b => b.style.visibility = 'hidden'); secnav.style.opacity = 1; topbar.style.opacity = 1; bg.style.opacity = 0;
-      measure(); lock(false); setActive();
+      measure(); lock(false);
+      target.scrollIntoView({ behavior: 'instant' });
+      setActive();
     } else { lock(true); enter(); }
   }
   (document.fonts ? document.fonts.ready : Promise.resolve()).then(boot);
@@ -119,7 +135,4 @@
   const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }), { threshold: 0.25 });
   document.querySelectorAll('main video').forEach(v => vio.observe(v));
 
-  // ---- bibtex copy ----
-  const cp = $('copybib');
-  if (cp) cp.addEventListener('click', async () => { try { await navigator.clipboard.writeText($('bib').textContent); cp.textContent = 'Copied'; setTimeout(() => cp.textContent = 'Copy', 1600); } catch (e) { cp.textContent = 'Select & copy'; } });
 })();
