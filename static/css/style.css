@@ -161,3 +161,24 @@ html.js .rv.in{opacity:1;transform:none}
 .anim.arch{background:#fff;padding:10px 12px;border:1px solid var(--line)}
 .anim.arch svg{width:100%;height:auto}
 .anim.arch svg text{font-family:'DejaVu Sans Mono',Menlo,monospace!important}
+
+/* Real robot: setup, full-width executions, then curves beside key results. */
+.real-setup,.real-results{display:grid;grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);gap:32px 40px;align-items:stretch;margin-top:32px}
+.real-setup .fig,.real-results .fig{margin:0;min-width:0;display:flex;flex-direction:column}
+.real-setup .rope-photo{flex:1;display:flex;align-items:center;background:#1e1e1e;border-radius:8px;overflow:hidden}
+.real-setup .rope-photo img{border:0;border-radius:0;background:transparent}
+.real-setup .setup-copy{display:flex;flex-direction:column;justify-content:space-between;gap:24px}
+.real-setup h4{margin:0 0 8px;font-family:var(--display);font-size:18px;line-height:1.3}
+.real-setup p{margin:0;font-size:17px;line-height:1.6}
+.real-frames{margin-top:40px}
+.real-frames img{border-radius:10px}
+.real-results{margin-top:40px;padding-top:36px;border-top:1px solid var(--line)}
+.real-results .anim{flex:1;display:flex;align-items:center;min-height:0}
+.real-results .anim svg{width:100%;height:auto}
+.real-results .stats{grid-template-columns:1fr;align-content:space-between;gap:24px;margin:0}
+.real-results .stats>div+div{border-top:1px solid var(--line);padding-top:20px}
+.real-results .stats h4{margin:0 0 10px;font-size:17px;font-weight:400;color:#b4531f}
+.real-results .stats .n{font-size:clamp(30px,3vw,40px)}
+.real-setup .cap,.real-results .cap{font-size:14px;line-height:1.55}
+@media(max-width:960px){.real-setup,.real-results{grid-template-columns:1fr}.real-setup .rope-photo{flex:none}.real-results .stats{grid-template-columns:repeat(3,minmax(0,1fr));gap:24px}.real-results .stats>div+div{border-top:0;padding-top:0}.real-results .anim{flex:none}.real-results .fig{max-width:680px;margin:0 auto}}
+@media(max-width:600px){.real-results .stats{grid-template-columns:1fr}.real-results .stats>div+div{border-top:1px solid var(--line);padding-top:20px}.real-setup,.real-results{gap:24px}.real-results .stats .n{font-size:36px}}

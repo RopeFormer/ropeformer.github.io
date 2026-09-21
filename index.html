@@ -13,7 +13,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;700;800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500;700&display=swap">
-<link rel="stylesheet" href="static/css/style.css?v=15">
+<link rel="stylesheet" href="static/css/style.css?v=16">
 </head>
 <body>
 
@@ -407,34 +407,35 @@
   <div class="body">
   <div class="head">
     <h3 class="hl">From simulation to unfamiliar physical ropes</h3>
-    <p>On the Unitree H1-2, each task uses a frozen TXL-1 policy running at 30 Hz. Two ZED 2i cameras track a single marker at the rope tip for Swing and Whip, or at the midpoint for Twirl. The triangulated position provides the rope observation; measured physical properties are never supplied to the policy. Each three-trial block begins with empty context, which is retained through trials 2 and 3. Between attempts, the policy pauses while the rope is returned to rest.</p>
+    <p>Each task runs on a Unitree H1-2 with a frozen TXL-1 policy at 30 Hz, using physical ropes unseen during training.</p>
   </div>
-  <figure class="fig plain rv">
-    <img src="static/images/real_robot_frames.jpg" alt="Three rows of frames showing the H1-2 executing Rope Swing, Rope Twirl and Rope Whip" style="border-radius:10px">
+
+  <div class="real-setup rv">
+    <figure class="fig">
+      <div class="rope-photo"><img src="static/images/Rope_showcase.png" alt="The physical ropes used for Rope Swing, Rope Twirl and Rope Whip"></div>
+      <figcaption class="cap">Ropes used for Swing, Twirl and Whip, from left to right. Their identities and physical parameters are not provided to the policy.</figcaption>
+    </figure>
+    <div class="setup-copy">
+      <div><h4>One tracked point</h4><p>Two ZED 2i cameras track a single marker at the rope tip for Swing and Whip, or at the midpoint for Twirl. Its triangulated position provides the rope observation.</p></div>
+      <div><h4>Three consecutive attempts</h4><p>Each block begins with empty context, which is retained through trials 2 and 3. Between attempts, the policy pauses while the rope is returned to rest.</p></div>
+    </div>
+  </div>
+
+  <figure class="fig plain real-frames rv">
+    <img src="static/images/real_robot_frames.jpg" alt="Three rows of frames showing the H1-2 executing Rope Swing, Rope Twirl and Rope Whip">
     <figcaption class="cap">Representative executions, top to bottom: <span class="tt">Rope_Swing</span>, <span class="tt">Rope_Twirl</span>, <span class="tt">Rope_Whip</span>. Frames progress left to right.</figcaption>
   </figure>
 
-  <div class="grid3 rv" style="margin-top:40px">
-    <div><div class="ph">[ Rope_Swing · T1 → T3 ]</div></div>
-    <div><div class="ph">[ Rope_Twirl · T1 → T3 ]</div></div>
-    <div><div class="ph">[ Rope_Whip · T1 → T3 ]</div></div>
-  </div>
-
-  <div class="stats rv">
-    <div><div class="n">−30.9<small>%</small></div><div class="d"><span class="tt">Rope_Swing</span> acquisition time, T1 → T3 (8.57 → 5.92 s, five ropes). Every rope is faster at T3 than at T1.</div></div>
-    <div><div class="n">−33.9<small>%</small></div><div class="d"><span class="tt">Rope_Twirl</span> acquisition time, T1 → T3 (3.23 → 2.13 s). Most of the gain arrives by T2; tracking error falls 55.6%.</div></div>
-    <div><div class="n">0.2 → 2.3</div><div class="d"><span class="tt">Rope_Whip</span> mean balls struck out of three, T1 → T3, over ten rope–height groups on two ropes.</div></div>
-  </div>
-
-  <div class="grid2 rv" style="margin-top:44px;align-items:start">
-    <figure class="fig col" style="margin:0">
+  <div class="real-results rv">
+    <figure class="fig">
       <div class="anim" data-fig="robot"></div>
-      <figcaption class="cap">Thin lines show individual ropes for Swing and Twirl, or rope–height groups for Whip; thick lines show their means. TAT is target acquisition time and MNE is mean normalised tracking error; lower is better for both. Whip reports balls struck out of three. Trial 1 starts with empty context, which is retained through trials 2 and 3.</figcaption>
+      <figcaption class="cap">Thin lines show individual ropes for Swing and Twirl, or rope–height groups for Whip; thick lines show their means. TAT is target acquisition time and MNE is mean normalised tracking error; lower is better for both. Whip reports balls struck out of three. Context is retained from trial 1 through trial 3.</figcaption>
     </figure>
-    <figure class="fig" style="margin:0">
-      <img src="static/images/Rope_showcase.png" alt="The physical ropes used for Rope Swing, Rope Twirl and Rope Whip">
-      <figcaption class="cap">Physical ropes used in the three tasks. All were unseen during training, and their identities and physical parameters are not provided to the policy.</figcaption>
-    </figure>
+    <div class="stats">
+      <div><h4 class="tt">Rope_Swing</h4><div class="n">−30.9<small>%</small></div><div class="d">Acquisition time, T1 → T3 (8.57 → 5.92 s, five ropes). Every rope is faster at T3 than at T1.</div></div>
+      <div><h4 class="tt">Rope_Twirl</h4><div class="n">−33.9<small>%</small></div><div class="d">Acquisition time, T1 → T3 (3.23 → 2.13 s). Most of the gain arrives by T2; tracking error falls 55.6%.</div></div>
+      <div><h4 class="tt">Rope_Whip</h4><div class="n">0.2 → 2.3</div><div class="d">Mean balls struck out of three, T1 → T3, over ten rope–height groups on two ropes.</div></div>
+    </div>
   </div>
 </div>
 </section>
