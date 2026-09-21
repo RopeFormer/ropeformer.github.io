@@ -134,17 +134,17 @@ html.js .rv.in{opacity:1;transform:none}
 .task .th h3{margin:0;font-size:24px}
 .task .th h3 .tt{font-weight:400;font-size:1.1em;color:#b4531f}
 .task .th .sub{font-size:16px;color:var(--ink-3)}
-/* figure card and text share one grid row: equal width (1:1) and equal height; the caption sits in a second row under the card */
-.task .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:auto auto;gap:10px 40px;margin-top:28px;align-items:stretch}
+/* Equal-width columns: the text spans both the figure and its caption. */
+.task .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-rows:1fr auto;gap:10px 40px;margin-top:28px;align-items:stretch}
 .task .row .fig{display:contents}
 .task .row .fig .anim,.task .row .fig .box{grid-column:1;grid-row:1;display:flex;align-items:center;justify-content:center;min-height:0;background:#fff;border:1px solid var(--line);border-radius:8px;padding:12px 10px 10px}
 .task .row .fig .anim svg,.task .row .fig .box img{display:block;width:100%;height:auto;max-height:100%;border:0;border-radius:0;background:transparent}
 .task .row .fig .cap{grid-column:1;grid-row:2;font-size:13.5px;margin:0}
-.task .row>div:last-child{grid-column:2;grid-row:1;align-self:center}
+.task .row>div:last-child{grid-column:2;grid-row:1 / 3;align-self:stretch;display:flex;flex-direction:column;justify-content:space-between}
 .task .row p{font-size:19px;line-height:1.6;margin:0 0 16px}
 .task .row p:last-child{margin-bottom:0}
 .task .row .lead{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.01em;color:var(--ink);margin-bottom:10px}
-@media (max-width:960px){.task .row{grid-template-columns:1fr;grid-template-rows:auto auto auto}.task .row>div:last-child{grid-column:1;grid-row:3;margin-top:8px}section.s,.band>.s{grid-template-columns:1fr;gap:20px 0}.rail{position:static}.lbl{font-size:24px}}
+@media (max-width:960px){.task .row{grid-template-columns:1fr;grid-template-rows:auto auto auto}.task .row>div:last-child{grid-column:1;grid-row:3;display:block;margin-top:8px}section.s,.band>.s{grid-template-columns:1fr;gap:20px 0}.rail{position:static}.lbl{font-size:24px}}
 
 .fig.col{max-width:420px}
 .fig.col img{border:0;background:transparent}
