@@ -155,6 +155,66 @@
     return ctl(seqs, resets);
   }
 
+  // ------------------------------------------------------------------ Fig. 6 (results.py::robot)
+  // Real robot: TAT / MNE for Swing and Twirl, Hits for Whip, T1 → T3, thin individual traces + thick mean. Same entrance
+  // as Fig. 3(a): every trace in every panel grows point → segment → point in lockstep, driven by two shared clip rects.
+  const tint = (c, a) => '#' + [1, 3, 5].map(i => Math.round(255 + (parseInt(c.slice(i, i + 2), 16) - 255) * a).toString(16).padStart(2, '0')).join('');
+  function buildRobot(root, d) {
+    const p = Canvas(252, 200, root); p.svg.setAttribute('aria-label', 'Real-robot results over trials 1 to 3: acquisition time and tracking error for Rope Swing and Rope Twirl, hits for Rope Whip');
+    const seqs = [], resets = [];
+    const colors = { swing: '#FF800E', twirl: '#C85200', whip: '#898989' };
+    const xs = [1, 2, 3], plotW = 64, plotH = 50, gut = 14, cols = [6, 88, 170], topY = 42, botY = 118;
+    const whipY = (topY + botY + plotH) / 2 - plotH / 2;
+    const X = (left, t) => left + gut + (t - 0.7) / 2.6 * plotW;
+    const Y = (top, v, lo, hi) => top + plotH - (v - lo) / (hi - lo) * plotH;
+    // two clip rects (T1→T2, T2→T3) shared by every line in the figure; x-spans are identical in all three columns' local frames
+    // only up to the column offset, so each column gets its own pair, grown together
+    const cpIds = cols.map(() => 'cp' + (uid++));
+    const rects = cols.map((left, ci) => { const cp = el('clipPath', { id: cpIds[ci] }, p.svg); return [1, 2].map(t => el('rect', { x: X(left, t), y: 0, width: 0, height: 200 }, cp)); });
+    const marks = [[], [], []];                                 // markers by trial
+    const dot = (x, y, c, r) => { const m = p.dot(x, y, c, r, null, 0); m.style.transformOrigin = `${x}px ${y}px`; return m; };
+    function frame(left, top, [lo, hi], ticks) {
+      const l = left + gut, r = left + gut + plotW, t = top, b = top + plotH;
+      for (const v of ticks) { const y = Y(top, v, lo, hi); p.path([[l, y], [r, y]], '#E5E5E5', 0.4); p.mid(l - 8, y + 2.4, String(v), 6.2); }
+      p.path([[l, t], [l, b], [r, b]], '#000', 0.55);
+      for (const tk of xs) { const x = X(left, tk); p.path([[x, b], [x, b + 2.4]], '#000', 0.5); p.mid(x, b + 10, 'T' + tk, 6.4); }
+    }
+    function traces(ci, top, rows, mean, [lo, hi], color) {
+      const left = cols[ci], light = tint(color, 0.38), clip = `url(#${cpIds[ci]})`;
+      for (const row of rows) {
+        p.path(row.map((v, j) => [X(left, xs[j]), Y(top, v, lo, hi)]), light, 0.7).setAttribute('clip-path', clip);
+        row.forEach((v, j) => marks[j].push(dot(X(left, xs[j]), Y(top, v, lo, hi), light, 1.15)));
+      }
+      p.path(mean.map((v, j) => [X(left, xs[j]), Y(top, v, lo, hi)]), color, 1.35).setAttribute('clip-path', clip);
+      mean.forEach((v, j) => marks[j].push(dot(X(left, xs[j]), Y(top, v, lo, hi), color, 1.7)));
+    }
+    p.path([[78, 10], [90, 10]], '#C7C7C7', 0.7); p.dot(84, 10, '#C7C7C7', 1.15, null, 0); p.text(94, 12.4, 'Individual', 7.2);
+    p.path([[148, 10], [160, 10]], '#555555', 1.35); p.dot(154, 10, '#555555', 1.7, null, 0); p.text(164, 12.4, 'Mean', 7.2);
+    [['(a) RopeSwing', 0], ['(b) RopeTwirl', 1], ['(c) RopeWhip', 2]].forEach(([lab, ci]) => p.mid(cols[ci] + gut + plotW / 2, 24, lab, 7.6));
+    p.text(cols[0] + gut, 38, 'TAT (s) ↓', 6.8); frame(cols[0], topY, [5, 12], [5, 7, 9, 11]);
+    traces(0, topY, d.swing.tat.trials, d.swing.tat.mean, [5, 12], colors.swing);
+    p.text(cols[0] + gut, 114, 'MNE (%) ↓', 6.8); frame(cols[0], botY, [2.8, 7.1], [3, 5, 7]);
+    traces(0, botY, d.swing.mne.trials, d.swing.mne.mean, [2.8, 7.1], colors.swing);
+    p.text(cols[1] + gut, 38, 'TAT (s) ↓', 6.8); frame(cols[1], topY, [1.8, 4.2], [2, 3, 4]);
+    traces(1, topY, d.twirl.tat.trials, d.twirl.tat.mean, [1.8, 4.2], colors.twirl);
+    p.text(cols[1] + gut, 114, 'MNE (%) ↓', 6.8); frame(cols[1], botY, [0.35, 2], [0.5, 1, 1.5, 2]);
+    traces(1, botY, d.twirl.mne.trials, d.twirl.mne.mean, [0.35, 2], colors.twirl);
+    p.text(cols[2] + gut, whipY - 4, 'Hits ↑', 6.8); frame(cols[2], whipY, [-0.05, 3.3], [0, 1, 2, 3]);
+    traces(2, whipY, d.whip.trials, d.whip.mean, [-0.05, 3.3], colors.whip);
+    const segW = plotW / 2.6;                                     // x-distance between consecutive trials
+    const growAll = (j, ms) => new Promise(res => { const t0 = performance.now(); const f = now => { const k = Math.min(1, (now - t0) / ms), e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; rects.forEach(r => r[j].setAttribute('width', segW * e)); k < 1 ? requestAnimationFrame(f) : res(); }; requestAnimationFrame(f); });
+    const reset = () => { rects.flat().forEach(r => r.setAttribute('width', 0)); marks.flat().forEach(hide); };
+    reset(); resets.push(reset);
+    seqs.push(async () => {
+      await wait(300);
+      for (let j = 0; j < 3; j++) {                              // all T_j points (thin first, mean on top), then all segments to T_j+1
+        marks[j].forEach(m => anim(m, [{ opacity: 0, transform: 'scale(.3)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 220 }));
+        if (j < 2) { await wait(120); await growAll(j, 320); await wait(40); }
+      }
+    });
+    return ctl(seqs, resets);
+  }
+
   // ------------------------------------------------------------------ Fig. 1: the pipeline master, animated by layer id
   // Main process (top row): one token per control step, o_t → Embedding → B1…B6 → Actor head → a_t; every block reads its
   // layer-specific cache and appends to it. Sub-process (bottom panel, shown for block 3), in the order of the paper /
@@ -235,10 +295,9 @@
 
   // ------------------------------------------------------------------ mount
   const DATA = window.ROPEFIG_DATA || {};
-  const builders = { swing: h => buildSwing(h, DATA.fig3), twirl: h => buildTwirl(h, DATA.fig4), arch: buildArch };
+  const builders = { swing: h => buildSwing(h, DATA.fig3), twirl: h => buildTwirl(h, DATA.fig4), robot: h => buildRobot(h, DATA.fig6), arch: buildArch };
   document.querySelectorAll('[data-fig]').forEach(host => {
     const c = builders[host.dataset.fig](host);
-    const btn = document.createElement('button'); btn.type = 'button'; btn.className = 'replay' + (host.dataset.fig === 'arch' ? ' br' : ''); btn.textContent = 'Replay'; btn.addEventListener('click', () => c.replay()); host.appendChild(btn);
     new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) c.play(); else c.stop(); }), { threshold: 0.5 }).observe(host);
   });
 })();
