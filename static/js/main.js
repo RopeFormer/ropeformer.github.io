@@ -131,6 +131,27 @@
   const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }), { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
   document.querySelectorAll('.rv').forEach(el => io.observe(el));
 
+  // ---- copy the displayed citation; keep manual selection available if blocked ----
+  const copyCitation = $('copy-citation'), citationText = $('citation-text'), citationStatus = $('citation-status');
+  if (copyCitation && citationText && citationStatus) {
+    copyCitation.hidden = false;
+    copyCitation.addEventListener('click', async () => {
+      citationStatus.textContent = '';
+      try {
+        await navigator.clipboard.writeText(citationText.textContent.trim());
+        citationStatus.textContent = 'BibTeX copied to clipboard.';
+      } catch {
+        const range = document.createRange();
+        range.selectNodeContents(citationText);
+        const selection = window.getSelection();
+        selection.removeAllRanges();
+        selection.addRange(range);
+        citationText.parentElement.focus();
+        citationStatus.textContent = 'Copy unavailable. Select the citation and copy it manually.';
+      }
+    });
+  }
+
   // ---- lazy-play videos only when visible ----
   const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }), { threshold: 0.25 });
   document.querySelectorAll('main video').forEach(v => vio.observe(v));

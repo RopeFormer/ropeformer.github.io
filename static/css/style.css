@@ -646,6 +646,61 @@ p.small,.cap {
   color: var(--accent);
 }
 
+/* ---------- citation ---------- */
+.citation-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.citation-header h3 {
+  margin: 0;
+}
+
+.copy-citation {
+  padding: 10px 16px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--paper-2);
+  color: var(--ink-2);
+  font: 600 14px var(--sans);
+  cursor: pointer;
+}
+
+.copy-citation:hover {
+  border-color: var(--ink-3);
+}
+
+.copy-citation:focus-visible,.citation pre:focus-visible {
+  outline: 2px solid var(--ink-3);
+  outline-offset: 3px;
+}
+
+.citation pre {
+  margin: 0;
+  padding: clamp(16px,3vw,28px);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--paper-2);
+  color: var(--ink-2);
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.citation code {
+  font: 15px/1.7 var(--tt);
+}
+
+.citation .citation-status {
+  min-height: 1.6em;
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--ink-3);
+}
+
 footer {
   border-top: 1px solid var(--line);
   padding: 40px var(--gut) 56px;
