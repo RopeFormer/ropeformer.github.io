@@ -154,6 +154,6 @@
 
   // ---- lazy-play videos only when visible ----
   const vio = new IntersectionObserver(es => es.forEach(e => { const v = e.target; if (e.isIntersecting) v.play().catch(() => {}); else v.pause(); }), { threshold: 0.25 });
-  document.querySelectorAll('main video').forEach(v => vio.observe(v));
+  document.querySelectorAll('main video[muted][loop]').forEach(v => vio.observe(v));
 
 })();
