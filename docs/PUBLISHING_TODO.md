@@ -18,6 +18,7 @@ hero-to-navigation sizing. Keep this checklist synchronized with the page.
 - BibTeX: Added the verified arXiv preprint citation and a copy button on
   September 22, 2026. Metadata matches the arXiv abstract page; the citation
   remains selectable when clipboard access is unavailable.
-- Project video: Added the 1920×1080 H.264/AAC project video and poster on
-  September 23, 2026. The main video uses native playback controls and does not
-  autoplay; the separate muted simulation clips retain their existing behavior.
+- Project video: Replaced with the updated project video and regenerated poster
+  on September 24, 2026. The web copy is H.264/AAC at 1280×720, uses native
+  playback controls, and does not autoplay; the separate muted simulation clips
+  retain their existing behavior.
